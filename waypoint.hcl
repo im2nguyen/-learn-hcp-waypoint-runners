@@ -23,7 +23,7 @@ variable "aws_region" {
   env = ["TF_VAR_region"]
 }
 
-project = "learn-hcp-runners"
+project = "learn-hcp-runners-tu"
 
 app "dev" {
   build {
