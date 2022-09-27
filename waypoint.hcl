@@ -86,3 +86,43 @@ app "ecs" {
     }
   }
 }
+
+app "aks" {
+  runner {
+    profile = "kubernetes-KUBE-RUNNER"
+  }
+
+  build {
+    use "docker" {
+      dockerfile = "Dockerfile"
+    }
+    registry {
+      use "docker" {
+        image = "${var.registry_username}/${var.registry_imagename}"
+        tag = "aks"
+        local = false
+        auth {
+          username = var.registry_username
+          password = var.registry_password
+        }
+      }
+    }
+  }
+
+  deploy {
+    use "kubernetes" {
+      probe_path = "/"
+      service_port = 8080
+      static_environment = {
+        PLATFORM = "kubernetes (aks)"
+      }
+    }
+  }
+
+  release {
+    use "kubernetes" {
+      load_balancer = true
+      port          = 8080
+    }
+  }
+}
